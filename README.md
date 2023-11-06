@@ -1,4 +1,6 @@
 # rotate_inverted_pendulum_rl
+This repository is dedicated to rotary inverted pendulum task with RL approuch. The Proximal Policy Optimization(PPO) from were used to solve the task.
+PPO implementation: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_continuous_action.py
 
 # Installation
 Python 3.10.12
