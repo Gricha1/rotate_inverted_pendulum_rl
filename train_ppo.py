@@ -10,11 +10,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
 
 from models import Agent
-from validate import validate
+from validate_ppo import validate
 from utils import make_env, make_val_env
 
 def train(args):
@@ -76,6 +75,7 @@ def train(args):
     # debug
     debug_reward = 0
     debug_steps = 0
+    last_eval_r = None
 
     for update in range(1, num_updates + 1):
         # Annealing the rate if instructed to do so.
@@ -119,7 +119,15 @@ def train(args):
 
             if global_step % args.eval_freq == 0:
                 with torch.no_grad():
-                    validate(eval_env=eval_env, model=agent, writer=writer, global_step=0, video_name="eval_trajectory")
+                    eval_info = validate(eval_env=eval_env, model=agent, writer=writer, global_step=0, video_name="eval_trajectory")
+                if args.save_model:
+                    print("val r:", eval_info["r"])
+                    if last_eval_r is None or last_eval_r < eval_info["r"]:
+                        model_path = f"runs/{run_name}/{args.exp_name}.model_best"
+                        torch.save(agent.state_dict(), model_path)
+                        print(f"model saved to {model_path}")
+                        last_eval_r = eval_info["r"]
+                        del eval_info
 
         # bootstrap value if not done
         with torch.no_grad():
@@ -223,6 +231,10 @@ def train(args):
     envs.close()
     writer.close()
     wandb.finish()
+    if args.save_model:
+        model_path = f"runs/{run_name}/{args.exp_name}.model_last"
+        torch.save(agent.state_dict(), model_path)
+        print(f"model saved to {model_path}")
 
 
 if __name__ == "__main__":
@@ -241,11 +253,10 @@ if __name__ == "__main__":
     args.wandb_entity = None
     args.capture_video = False
     args.save_model = True
-    args.upload_model = True
 
     args.env_id = "custom_InvertedPendulum"
     #args.env_id = "InvertedPendulum-v4" #"HalfCheetah" #"InvertedPendulum-v4" # "HalfCheetah-v4"
-    args.total_timesteps = 10_000_000 # 600_000
+    args.total_timesteps = 10_000_000 # 10_000_000
     args.learning_rate = 3e-4
     args.num_envs = 1
     args.eval_freq = 100_000 # 100_000
@@ -270,13 +281,13 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
     run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
 
-
-    register(
-        id="custom_InvertedPendulum",
-        entry_point="envs.inverted_pendulum:InvertedPendulumEnv",
-        max_episode_steps=1000,
-        reward_threshold=950.0,
-    )
+    if args.env_id == "custom_InvertedPendulum":
+        register(
+            id="custom_InvertedPendulum",
+            entry_point="envs.inverted_pendulum:InvertedPendulumEnv",
+            max_episode_steps=1000,
+            reward_threshold=950.0,
+        )
 
     train(args)
 
