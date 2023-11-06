@@ -17,61 +17,9 @@ from models import Agent
 from validate import validate
 from utils import make_env, make_val_env
 
-
-if __name__ == "__main__":
-
-    class Config:
-        def __init__(self):
-            pass
-
-    args = Config()
-    args.exp_name = "testing_exp_1"
-    args.seed = 1
-    args.torch_deterministic = True # ?
-    args.cuda = True
-    args.track = True # wandb
-    args.wandb_project_name = "test_ppo_pendulum"
-    args.wandb_entity = None
-    args.capture_video = False
-    args.save_model = True
-    args.upload_model = True
-
-    args.env_id = "custom_InvertedPendulum"
-    #args.env_id = "InvertedPendulum-v4" #"HalfCheetah" #"InvertedPendulum-v4" # "HalfCheetah-v4"
-    args.total_timesteps = 10_000_000 # 600_000
-    args.learning_rate = 3e-4
-    args.num_envs = 1
-    args.eval_freq = 100_000 # 100_000
-    args.num_steps = 8196
-    args.anneal_lr = True # True
-    args.gamma = 0.99
-    args.gae_lambda = 0.95 # ?
-    args.num_minibatches = 4
-    args.update_epochs = 10
-    args.norm_adv = True
-    args.clip_coef = 0.2
-    args.clip_vloss = True
-    args.ent_coef = 0 # 1e-4
-    args.vf_coef = 0.5
-    args.max_grad_norm = 6.0
-    args.target_kl = None
-    args.num_layers = 32 # 32
-
-    args.batch_size = int(args.num_envs * args.num_steps)
-    args.minibatch_size = int(args.batch_size // args.num_minibatches)
-
-    device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
-
-
-    register(
-        id="custom_InvertedPendulum",
-        entry_point="envs.inverted_pendulum:InvertedPendulumEnv",
-        max_episode_steps=1000,
-        reward_threshold=950.0,
-    )
-
+def train(args):
     os.environ["WANDB_API_KEY"] = "e02adc96c6e6d09cc6555b77b6eda5c038be07ca"
+
     if args.track:
             import wandb
 
@@ -117,7 +65,6 @@ if __name__ == "__main__":
     rewards = torch.zeros((args.num_steps, args.num_envs)).to(device)
     dones = torch.zeros((args.num_steps, args.num_envs)).to(device)
     values = torch.zeros((args.num_steps, args.num_envs)).to(device)
-
 
     # TRY NOT TO MODIFY: start the game
     global_step = 0
@@ -276,6 +223,63 @@ if __name__ == "__main__":
     envs.close()
     writer.close()
     wandb.finish()
+
+
+if __name__ == "__main__":
+
+    class Config:
+        def __init__(self):
+            pass
+
+    args = Config()
+    args.exp_name = "testing_exp_1"
+    args.seed = 1
+    args.torch_deterministic = True # ?
+    args.cuda = True
+    args.track = True # wandb
+    args.wandb_project_name = "test_ppo_pendulum"
+    args.wandb_entity = None
+    args.capture_video = False
+    args.save_model = True
+    args.upload_model = True
+
+    args.env_id = "custom_InvertedPendulum"
+    #args.env_id = "InvertedPendulum-v4" #"HalfCheetah" #"InvertedPendulum-v4" # "HalfCheetah-v4"
+    args.total_timesteps = 10_000_000 # 600_000
+    args.learning_rate = 3e-4
+    args.num_envs = 1
+    args.eval_freq = 100_000 # 100_000
+    args.num_steps = 8196
+    args.anneal_lr = True # True
+    args.gamma = 0.99
+    args.gae_lambda = 0.95 # ?
+    args.num_minibatches = 4
+    args.update_epochs = 10
+    args.norm_adv = True
+    args.clip_coef = 0.2
+    args.clip_vloss = True
+    args.ent_coef = 0 # 1e-4
+    args.vf_coef = 0.5
+    args.max_grad_norm = 6.0
+    args.target_kl = None
+    args.num_layers = 32 # 32
+
+    args.batch_size = int(args.num_envs * args.num_steps)
+    args.minibatch_size = int(args.batch_size // args.num_minibatches)
+
+    device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
+    run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+
+
+    register(
+        id="custom_InvertedPendulum",
+        entry_point="envs.inverted_pendulum:InvertedPendulumEnv",
+        max_episode_steps=1000,
+        reward_threshold=950.0,
+    )
+
+    train(args)
+
 
 
 

@@ -9,7 +9,7 @@ def record_video(env, policy, fps=30, mode="rgb_array`", max_steps=100, writer=N
   val_info["r"] = 0
   done = False
   state = env.reset()
-  img = env.render()
+  img = env.custom_render()
   images.append(img)
   steps = 0
   while not done:
@@ -26,7 +26,7 @@ def record_video(env, policy, fps=30, mode="rgb_array`", max_steps=100, writer=N
     steps += 1
     val_info["r"] += reward
     if steps <= max_steps:
-      img = env.render()
+      img = env.custom_render()
       images.append(img)
   print("val steps:", steps)
   val_info["l"] = steps

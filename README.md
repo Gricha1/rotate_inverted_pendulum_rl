@@ -1,7 +1,7 @@
 # rotate_inverted_pendulum_rl
 
 # Installation
-
+Python 3.10.12
 
 # Environment
 1. Action Space: 
@@ -25,7 +25,7 @@ python train_ppo.py
 ```
 
 # Validate
-to start train use
+to start validation use
 ```commandline
 python validate.py
 ```
