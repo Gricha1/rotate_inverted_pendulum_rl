@@ -17,7 +17,7 @@ from validate_ppo import validate
 from utils import make_env, make_val_env
 
 def train(args):
-    os.environ["WANDB_API_KEY"] = "e02adc96c6e6d09cc6555b77b6eda5c038be07ca"
+    #os.environ["WANDB_API_KEY"] = "<your token>"
 
     if args.track:
             import wandb
