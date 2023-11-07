@@ -65,6 +65,15 @@ python validate_ppo.py
 ```
 
 # Results
-![alt text](https://github.com/Gricha1/rotate_inverted_pendulum_rl/blob/main/train_stats.png?raw=true)
+## Training curves with 2 seeds:
+<img src="docs/train_stats.png" alt="Alt text" title="Optional title" width="600" height="300">
 
+## Validation curves while training:
+<img src="docs/train_val_stats.png" alt="Alt text" title="Optional title" width="600" height="300">
+
+## Best weights behavior:
+<img src="docs/validate_behave.gif" alt="Alt text" title="Optional title" width="300" height="300">
+
+## Model trajectory:
+<img src="docs/validate_stats.png" alt="Alt text" title="Optional title" width="800" height="300">
 
