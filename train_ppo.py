@@ -245,7 +245,7 @@ if __name__ == "__main__":
 
     args = Config()
     args.exp_name = "testing_exp_1"
-    args.seed = 1
+    args.seed = 10
     args.torch_deterministic = True # ?
     args.cuda = True
     args.track = True # wandb

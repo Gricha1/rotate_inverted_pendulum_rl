@@ -16,13 +16,13 @@ env.reset()
 done = False
 cumul_reward = 0
 print("********************")
-#print("sum image:", env.custom_render().sum())
-print("sum image:", env.render().sum())
+print("sum image:", env.custom_render().sum())
+#print("sum image:", env.render().sum())
 print("********************")
 while not done:
     _, r, done, _ = env.step(env.action_space.sample())
     cumul_reward += r
-    #env.custom_render()
-    env.render()
+    env.custom_render()
+    #env.render()
 print("cumul reward:", cumul_reward)
 

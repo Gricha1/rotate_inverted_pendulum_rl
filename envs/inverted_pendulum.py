@@ -4,7 +4,8 @@ import numpy as np
 import cv2
 import gym
 from gym import utils
-from gym.envs.mujoco import MujocoEnv, MuJocoPyEnv
+#from gym.envs.mujoco import MujocoEnv, MuJocoPyEnv
+from gym.envs.mujoco import MuJocoPyEnv
 from gym.spaces import Box
 
 

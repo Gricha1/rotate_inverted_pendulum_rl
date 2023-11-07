@@ -41,7 +41,6 @@ def make_env(env_id, seed, idx, capture_video, run_name, gamma):
             if idx == 0:
                 env = gym.wrappers.RecordVideo(env, f"videos/{run_name}")
         env = gym.wrappers.ClipAction(env)
-        #env = gym.wrappers.NormalizeObservation(env)
         env = gym.wrappers.NormalizeReward(env, gamma=gamma)
         env.seed(seed)
         env.action_space.seed(seed)
@@ -55,8 +54,7 @@ def make_val_env(env_id, seed, gamma, render_mode="single_rgb_array"):
     env = gym.make(env_id, render_mode=render_mode)
     env = gym.wrappers.RecordEpisodeStatistics(env)
     env = gym.wrappers.ClipAction(env)
-    #env = gym.wrappers.NormalizeObservation(env)
-    env = gym.wrappers.NormalizeReward(env, gamma=gamma)
+    #env = gym.wrappers.NormalizeReward(env, gamma=gamma)
     env.seed(seed)
     env.action_space.seed(seed)
     env.observation_space.seed(seed)
