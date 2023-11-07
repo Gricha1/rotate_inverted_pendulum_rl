@@ -65,6 +65,6 @@ python validate_ppo.py
 ```
 
 # Results
-
+![alt text](https://github.com/Gricha1/rotate_inverted_pendulum_rl/blob/main/train_stats.png?raw=true)
 
 
