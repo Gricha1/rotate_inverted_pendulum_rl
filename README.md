@@ -61,7 +61,7 @@ python train_ppo.py
 # Validate
 to start validation use
 ```commandline
-python validate.py
+python validate_ppo.py
 ```
 
 # Results
