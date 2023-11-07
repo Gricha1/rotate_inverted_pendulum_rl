@@ -69,8 +69,7 @@ if __name__ == "__main__":
     agent = Agent(envs).to(device)
 
     if args.load_model:
-      #model_path = f"runs/{run_name}/{args.exp_name}.model"
-      model_path = "runs/custom_InvertedPendulum__testing_exp_1__1__1699305657/testing_exp_1.model"
+      model_path = "final_weights/weight.model_best"
       agent.load_state_dict(torch.load(model_path, map_location=device))
 
     writer = None
@@ -90,4 +89,4 @@ if __name__ == "__main__":
 
     # init eval env
     eval_env = make_val_env(args.env_id, 1, 0.99, render_mode="single_rgb_array")
-    validate(eval_env=eval_env, model=agent, writer=writer, global_step=1)
+    validate(eval_env=eval_env, model=agent, writer=writer, global_step=1, max_steps=1000)
